@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+// import React, { useState } from "react"
 import useFetchAPI from "./useFetchAPI"
 import PokeTable from "./PokeTable"
 
