@@ -43,7 +43,7 @@ export default function PokeTable(props) {
 		</>
 	)
 }
-
+//this is a garbage line of code delete me
 // {
 /* <TableCell align="right">{rows()}</TableCell> */
 // }
