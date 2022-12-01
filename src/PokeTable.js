@@ -11,7 +11,6 @@ import UseFetchMoreInfoButton from "./UseFetchMoreInfoButton"
 export default function PokeTable(props) {
 	let [moreData, setMoreData] = useState(null)
 	const fetchMoreData = (url) => {
-		console.log("url", url)
 		return fetch(url)
 			.then((res) => {
 				return res.json()
@@ -48,7 +47,6 @@ export default function PokeTable(props) {
 					</TableHead>
 					<TableBody>
 						{props.data.results.map((p) => {
-							console.log("p", p)
 							return (
 								<TableRow
 									key={p.name}
@@ -66,10 +64,27 @@ export default function PokeTable(props) {
 										<div>NoData</div>
 									) : (
 										<TableCell p={p}>
-											{console.log("moreData", moreData.name)}
 											{moreData.name === p.name
 												? moreData.abilities[0].ability.name
 												: null}
+										</TableCell>
+									)}
+									{moreData === null ? (
+										<div>NoData</div>
+									) : (
+										<TableCell>
+											{moreData.name === p.name
+												? moreData.types[0].type.name
+												: null}
+										</TableCell>
+									)}
+									{moreData === null ? (
+										<div>NoData</div>
+									) : (
+										<TableCell>
+											{moreData.name === "oddish" ? (
+												<div>super fucking cool</div>
+											) : null}
 										</TableCell>
 									)}
 								</TableRow>
