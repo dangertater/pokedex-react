@@ -5,7 +5,13 @@ export default function UseFetchMoreInfoButton(props) {
 		<>
 			<button
 				onClick={(e) => {
-					return props.fetchMoreData(props.pURL)
+					console.log(
+						"props.fetchMoreData(props.pURL)",
+						props.fetchMoreData(props.pURL)
+					)
+					let result = props.fetchMoreData(props.pURL)
+					console.log("result", result)
+					return result
 				}}
 			>
 				more info

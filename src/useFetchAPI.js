@@ -10,7 +10,6 @@ let useFetchAPI = () => {
 				return res.json()
 			})
 			.then((returnedData) => {
-				// console.log(returnedData)
 				return setData(returnedData)
 			})
 	}

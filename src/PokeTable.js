@@ -9,7 +9,6 @@ import { TableBody } from "@mui/material"
 import UseFetchMoreInfoButton from "./UseFetchMoreInfoButton"
 
 export default function PokeTable(props) {
-	console.log("pokeTable props", props)
 	let [moreData, setMoreData] = useState(null)
 	const fetchMoreData = (url) => {
 		fetch(url)
@@ -20,12 +19,10 @@ export default function PokeTable(props) {
 				return setMoreData(returnedData)
 			})
 	}
-
+	// let abilitiesArray = []
 	let getAbilitiesOutOfMoreData = (moreData) => {
-		let abilitiesArray = []
-		// console.log("abiltiies function moreData.abilites", moreData.abilities)
-		abilitiesArray.push(moreData.abilities)
-		return abilitiesArray[0]
+		let abilities = moreData.abilities
+		return abilities
 	}
 	return (
 		<>
@@ -41,7 +38,6 @@ export default function PokeTable(props) {
 					</TableHead>
 					<TableBody>
 						{props.data.results.map((p) => {
-							console.log("p", p)
 							return (
 								<TableRow
 									key={p.name}
@@ -55,14 +51,13 @@ export default function PokeTable(props) {
 											fetchMoreData={fetchMoreData}
 										></UseFetchMoreInfoButton>
 									</TableCell>
-									{/* TODO add an if statement hereish to decide weather or not to call TableCells */}
 									{moreData === null ? (
 										<div>NoData</div>
 									) : (
 										<TableCell>
 											asdf
-											{getAbilitiesOutOfMoreData(moreData)}
-											{console.log("pokeTable moreData", moreData)}
+											{/* {getAbilitiesOutOfMoreData(moreData)}
+											{console.log("pokeTable moreData", moreData)} */}
 										</TableCell>
 									)}
 								</TableRow>
