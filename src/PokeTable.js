@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState, useEffect, useContext } from "react"
 import Table from "@mui/material/Table"
 import TableCell from "@mui/material/TableCell"
 import TableContainer from "@mui/material/TableContainer"
@@ -7,7 +7,26 @@ import TableRow from "@mui/material/TableRow"
 import Paper from "@mui/material/Paper"
 import { TableBody } from "@mui/material"
 import UseFetchMoreInfoButton from "./UseFetchMoreInfoButton"
+
 export default function PokeTable(props) {
+	console.log("pokeTable props", props)
+	let [moreData, setMoreData] = useState(null)
+	const fetchMoreData = (url) => {
+		fetch(url)
+			.then((res) => {
+				return res.json()
+			})
+			.then((returnedData) => {
+				return setMoreData(returnedData)
+			})
+	}
+
+	let getAbilitiesOutOfMoreData = (moreData) => {
+		let abilitiesArray = []
+		// console.log("abiltiies function moreData.abilites", moreData.abilities)
+		abilitiesArray.push(moreData.abilities)
+		return abilitiesArray[0]
+	}
 	return (
 		<>
 			<TableContainer component={Paper}>
@@ -15,21 +34,37 @@ export default function PokeTable(props) {
 					<TableHead>
 						<TableRow>
 							<TableCell>Pokemon</TableCell>
+							<TableCell>Type</TableCell>
+							<TableCell>Abilities</TableCell>
+							<TableCell>Coolness</TableCell>
 						</TableRow>
 					</TableHead>
 					<TableBody>
 						{props.data.results.map((p) => {
-							let moreData = p.url
+							console.log("p", p)
 							return (
-								<TableRow key={p.name}>
-									<TableCell>
+								<TableRow
+									key={p.name}
+									sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+								>
+									<TableCell key={p.name} component="th" scope="row">
 										{p.name}
 										<UseFetchMoreInfoButton
 											pURL={p.url}
 											name={p.name}
-										></UseFetchMoreInfoButton>{" "}
-										- {p.url}
+											fetchMoreData={fetchMoreData}
+										></UseFetchMoreInfoButton>
 									</TableCell>
+									{/* TODO add an if statement hereish to decide weather or not to call TableCells */}
+									{moreData === null ? (
+										<div>NoData</div>
+									) : (
+										<TableCell>
+											asdf
+											{getAbilitiesOutOfMoreData(moreData)}
+											{console.log("pokeTable moreData", moreData)}
+										</TableCell>
+									)}
 								</TableRow>
 							)
 						})}
@@ -39,6 +74,7 @@ export default function PokeTable(props) {
 		</>
 	)
 }
+// 	<PokemonAttributeCell moreData={moreData} />
 
 // {rows.map((row) => (
 //     <TableRow>
