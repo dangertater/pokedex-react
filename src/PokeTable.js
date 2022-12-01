@@ -11,18 +11,28 @@ import UseFetchMoreInfoButton from "./UseFetchMoreInfoButton"
 export default function PokeTable(props) {
 	let [moreData, setMoreData] = useState(null)
 	const fetchMoreData = (url) => {
-		fetch(url)
+		console.log("url", url)
+		return fetch(url)
 			.then((res) => {
 				return res.json()
 			})
 			.then((returnedData) => {
-				return setMoreData(returnedData)
+				setMoreData(returnedData)
+				return returnedData
 			})
 	}
-	// let abilitiesArray = []
-	let getAbilitiesOutOfMoreData = (moreData) => {
-		let abilities = moreData.abilities
-		return abilities
+	let useFetchAPI = () => {
+		let [data, setData] = useState(null)
+		const fetchData = (url) => {
+			fetch(url)
+				.then((res) => {
+					return res.json()
+				})
+				.then((returnedData) => {
+					return setData(returnedData)
+				})
+		}
+		return [data, fetchData]
 	}
 	return (
 		<>
@@ -31,13 +41,14 @@ export default function PokeTable(props) {
 					<TableHead>
 						<TableRow>
 							<TableCell>Pokemon</TableCell>
-							<TableCell>Type</TableCell>
 							<TableCell>Abilities</TableCell>
+							<TableCell>Type</TableCell>
 							<TableCell>Coolness</TableCell>
 						</TableRow>
 					</TableHead>
 					<TableBody>
 						{props.data.results.map((p) => {
+							console.log("p", p)
 							return (
 								<TableRow
 									key={p.name}
@@ -54,10 +65,11 @@ export default function PokeTable(props) {
 									{moreData === null ? (
 										<div>NoData</div>
 									) : (
-										<TableCell>
-											asdf
-											{/* {getAbilitiesOutOfMoreData(moreData)}
-											{console.log("pokeTable moreData", moreData)} */}
+										<TableCell p={p}>
+											{console.log("moreData", moreData.name)}
+											{moreData.name === p.name
+												? moreData.abilities[0].ability.name
+												: null}
 										</TableCell>
 									)}
 								</TableRow>

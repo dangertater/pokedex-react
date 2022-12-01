@@ -1,21 +1,20 @@
 import React, { useState } from "react"
+import Button from "@mui/material/Button"
 
 export default function UseFetchMoreInfoButton(props) {
 	return (
 		<>
-			<button
+			<Button
 				onClick={(e) => {
-					console.log(
-						"props.fetchMoreData(props.pURL)",
-						props.fetchMoreData(props.pURL)
-					)
-					let result = props.fetchMoreData(props.pURL)
-					console.log("result", result)
-					return result
+					props.fetchMoreData(props.pURL).then((result) => {
+						console.log("result", result)
+					})
 				}}
+				variant="contained"
+				size="small"
 			>
 				more info
-			</button>
+			</Button>
 		</>
 	)
 }
