@@ -6,19 +6,9 @@ import TableHead from "@mui/material/TableHead"
 import TableRow from "@mui/material/TableRow"
 import Paper from "@mui/material/Paper"
 import { TableBody } from "@mui/material"
-let generateIndyPokemon = (name) => {
-	return { name }
-}
+
 //TODO add the other
 export default function PokeTable(props) {
-	let justNames = []
-	generateIndyPokemon(
-		props.data.results.map((indyPokemon) => {
-			console.log("indyPokemon.name", indyPokemon.name)
-			justNames.push(indyPokemon.name)
-			return indyPokemon.name
-		})
-	)
 	return (
 		<>
 			<TableContainer component={Paper}>
@@ -29,21 +19,22 @@ export default function PokeTable(props) {
 						</TableRow>
 					</TableHead>
 					<TableBody>
-						{justNames.map((name) => {
+						{props.data.results.map((p) => {
 							return (
-								<TableRow>
-									<TableCell>{name}</TableCell>
+								<TableRow key={p.name}>
+									<TableCell>
+										{p.name} - {p.url}
+									</TableCell>
 								</TableRow>
 							)
 						})}
-						{/* <TableRow>{justNames}</TableRow> */}
 					</TableBody>
 				</Table>
 			</TableContainer>
 		</>
 	)
 }
-//this is a garbage line of code delete me
+//this is a garbage line of code delete me 2
 // {
 /* <TableCell align="right">{rows()}</TableCell> */
 // }
