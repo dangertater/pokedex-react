@@ -6,8 +6,7 @@ import TableHead from "@mui/material/TableHead"
 import TableRow from "@mui/material/TableRow"
 import Paper from "@mui/material/Paper"
 import { TableBody } from "@mui/material"
-
-//TODO add the other
+import UseFetchMoreInfoButton from "./UseFetchMoreInfoButton"
 export default function PokeTable(props) {
 	return (
 		<>
@@ -20,10 +19,16 @@ export default function PokeTable(props) {
 					</TableHead>
 					<TableBody>
 						{props.data.results.map((p) => {
+							let moreData = p.url
 							return (
 								<TableRow key={p.name}>
 									<TableCell>
-										{p.name} - {p.url}
+										{p.name}
+										<UseFetchMoreInfoButton
+											pURL={p.url}
+											name={p.name}
+										></UseFetchMoreInfoButton>{" "}
+										- {p.url}
 									</TableCell>
 								</TableRow>
 							)
@@ -34,10 +39,6 @@ export default function PokeTable(props) {
 		</>
 	)
 }
-//this is a garbage line of code delete me 2
-// {
-/* <TableCell align="right">{rows()}</TableCell> */
-// }
 
 // {rows.map((row) => (
 //     <TableRow>
