@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react"
+import React, { useState, useRef } from "react"
 import Table from "@mui/material/Table"
 import TableCell from "@mui/material/TableCell"
 import TableContainer from "@mui/material/TableContainer"
@@ -10,6 +10,19 @@ import UseFetchMoreInfoButton from "./UseFetchMoreInfoButton"
 
 export default function PokeTable(props) {
 	let [moreData, setMoreData] = useState(null)
+	let observer = useRef()
+	let lastPokemonElementRef = (node) => {
+		if (observer.current) observer.current.disconnect()
+		observer.current = new IntersectionObserver((entries) => {
+			if (entries[0].isIntersecting) {
+				props.fetchData()
+			}
+		})
+		if (node) {
+			observer.current.observe(node)
+		}
+	}
+
 	const fetchMoreData = (url) => {
 		return fetch(url)
 			.then((res) => {
@@ -20,23 +33,13 @@ export default function PokeTable(props) {
 				return returnedData
 			})
 	}
-	let useFetchAPI = () => {
-		let [data, setData] = useState(null)
-		const fetchData = (url) => {
-			fetch(url)
-				.then((res) => {
-					return res.json()
-				})
-				.then((returnedData) => {
-					return setData(returnedData)
-				})
-		}
-		return [data, fetchData]
-	}
+	console.log("outside func observer", observer.current)
+
 	return (
 		<>
 			<TableContainer component={Paper}>
 				<Table sx={{ minWidth: 350 }} aria-label="simple table">
+					{/* table labels */}
 					<TableHead>
 						<TableRow>
 							<TableCell>Pokemon</TableCell>
@@ -45,50 +48,97 @@ export default function PokeTable(props) {
 							<TableCell>Coolness</TableCell>
 						</TableRow>
 					</TableHead>
+					{/* table of pokemon*/}
 					<TableBody>
-						{props.data.results.map((p) => {
-							return (
-								<TableRow
-									key={p.name}
-									sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-								>
-									<TableCell key={p.name} component="th" scope="row">
-										{p.name}
-										<UseFetchMoreInfoButton
-											pURL={p.url}
-											name={p.name}
-											fetchMoreData={fetchMoreData}
-										></UseFetchMoreInfoButton>
-									</TableCell>
-									{moreData === null ? (
-										<div>NoData</div>
-									) : (
-										<TableCell p={p}>
-											{moreData.name === p.name
-												? moreData.abilities[0].ability.name
-												: null}
+						{props.pokemon.map((p, index) => {
+							if (props.pokemon.length === index + 1) {
+								return (
+									<TableRow
+										key={p.name}
+										sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+										ref={lastPokemonElementRef}
+									>
+										<TableCell key={p.name} component="th" scope="row">
+											{p.name}
+											<UseFetchMoreInfoButton
+												pURL={p.url}
+												name={p.name}
+												fetchMoreData={fetchMoreData}
+											></UseFetchMoreInfoButton>
 										</TableCell>
-									)}
-									{moreData === null ? (
-										<div>NoData</div>
-									) : (
-										<TableCell>
-											{moreData.name === p.name
-												? moreData.types[0].type.name
-												: null}
+										{moreData === null ? (
+											<div>NoData</div>
+										) : (
+											<TableCell p={p}>
+												{moreData.name === p.name
+													? moreData.abilities[0].ability.name
+													: null}
+											</TableCell>
+										)}
+										{moreData === null ? (
+											<div>NoData</div>
+										) : (
+											<TableCell>
+												{moreData.name === p.name
+													? moreData.types[0].type.name
+													: null}
+											</TableCell>
+										)}
+										{moreData === null ? (
+											<div>NoData</div>
+										) : (
+											<TableCell>
+												{moreData.name === "oddish" ? (
+													<div>super fucking cool</div>
+												) : null}
+											</TableCell>
+										)}
+									</TableRow>
+								)
+							} else {
+								return (
+									<TableRow
+										key={p.name}
+										sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+									>
+										<TableCell key={p.name} component="th" scope="row">
+											{p.name}
+											<UseFetchMoreInfoButton
+												pURL={p.url}
+												name={p.name}
+												fetchMoreData={fetchMoreData}
+											></UseFetchMoreInfoButton>
 										</TableCell>
-									)}
-									{moreData === null ? (
-										<div>NoData</div>
-									) : (
-										<TableCell>
-											{moreData.name === "oddish" ? (
-												<div>super fucking cool</div>
-											) : null}
-										</TableCell>
-									)}
-								</TableRow>
-							)
+										{moreData === null ? (
+											<div>NoData</div>
+										) : (
+											<TableCell p={p}>
+												{moreData.name === p.name
+													? moreData.abilities[0].ability.name
+													: null}
+											</TableCell>
+										)}
+										{moreData === null ? (
+											<div>NoData</div>
+										) : (
+											<TableCell>
+												{moreData.name === p.name
+													? moreData.types[0].type.name
+													: null}
+											</TableCell>
+										)}
+										{moreData === null ? (
+											<div>NoData</div>
+										) : (
+											<TableCell>
+												{moreData.name === "oddish" ? (
+													<div>super fucking cool</div>
+												) : null}
+											</TableCell>
+										)}
+									</TableRow>
+								)
+							}
 						})}
 					</TableBody>
 				</Table>
@@ -96,16 +146,3 @@ export default function PokeTable(props) {
 		</>
 	)
 }
-// 	<PokemonAttributeCell moreData={moreData} />
-
-// {rows.map((row) => (
-//     <TableRow>
-//         <TableCell component="th" scope="row">
-//             {row.name}
-//         </TableCell>
-//         <TableCell align="right">{row.calories}</TableCell>
-//         <TableCell align="right">{row.fat}</TableCell>
-//         <TableCell align="right">{row.carbs}</TableCell>
-//         <TableCell align="right">{row.protein}</TableCell>
-//     </TableRow>
-// ))}

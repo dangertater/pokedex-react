@@ -3,16 +3,20 @@ import useFetchAPI from "./useFetchAPI"
 import PokeTable from "./PokeTable"
 
 function App() {
-	const [data, fetchData] = useFetchAPI()
+	const [pokemon, fetchData] = useFetchAPI()
 
 	return (
 		<div className="App">
 			<header className="App-header"></header>
 			<h1>pokedex</h1>
-			{data === null ? <div>No Data</div> : <PokeTable data={data}></PokeTable>}
+			{pokemon === null ? (
+				<div>No Data</div>
+			) : (
+				<PokeTable pokemon={pokemon} fetchData={fetchData}></PokeTable>
+			)}
 			<button
 				onClick={(e) => {
-					fetchData("https://pokeapi.co/api/v2/pokemon")
+					fetchData()
 				}}
 			>
 				fetch api

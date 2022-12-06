@@ -1,18 +1,21 @@
-// import React from "react" - do i need?
 import { useState } from "react"
 
 let useFetchAPI = () => {
-	let [data, setData] = useState(null)
-
-	const fetchData = (url) => {
-		fetch(url)
+	let [pokemon, setPokemon] = useState([])
+	let [nextUrl, setNextUrl] = useState("https://pokeapi.co/api/v2/pokemon")
+	const fetchData = () => {
+		if (nextUrl === null) {
+			return console.log("no more urls")
+		}
+		fetch(nextUrl)
 			.then((res) => {
 				return res.json()
 			})
 			.then((returnedData) => {
-				return setData(returnedData)
+				setPokemon([...pokemon, ...returnedData.results])
+				setNextUrl(returnedData.next)
 			})
 	}
-	return [data, fetchData]
+	return [pokemon, fetchData]
 }
 export default useFetchAPI
